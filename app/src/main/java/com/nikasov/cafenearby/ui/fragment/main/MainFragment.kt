@@ -41,4 +41,8 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
     override fun refresh() {
 
     }
+
+    override fun setupViews() {
+
+    }
 }

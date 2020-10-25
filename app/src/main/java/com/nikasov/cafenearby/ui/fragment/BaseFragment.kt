@@ -15,6 +15,7 @@ abstract class BaseFragment<T : ViewDataBinding> : Fragment() {
         activity?.hideKeyBoard()
     }
 
+    abstract fun setupViews()
     abstract fun refresh()
 
     override fun onDestroyView() {

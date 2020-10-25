@@ -9,7 +9,9 @@ import androidx.databinding.ViewDataBinding
 import com.nikasov.cafenearby.R
 import com.nikasov.cafenearby.databinding.FragmentFavoriteBinding
 import com.nikasov.cafenearby.ui.fragment.BaseFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class FavoriteFragment: BaseFragment<FragmentFavoriteBinding>() {
 
     override fun onCreateView(
@@ -24,6 +26,10 @@ class FavoriteFragment: BaseFragment<FragmentFavoriteBinding>() {
     }
 
     override fun refresh() {
+
+    }
+
+    override fun setupViews() {
 
     }
 }

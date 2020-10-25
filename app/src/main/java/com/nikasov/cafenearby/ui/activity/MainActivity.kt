@@ -4,8 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
-import com.nikasov.cafenearby.R
 import com.nikasov.cafenearby.utils.setupWithNavController
+import com.nikasov.cafenearby.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 
