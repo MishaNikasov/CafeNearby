@@ -4,6 +4,12 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -11,12 +17,36 @@ class MapViewModel @ViewModelInject constructor(
 ): ViewModel() {
 
     val inProgress = MutableLiveData<Boolean>()
-    val mapIsLoaded = MutableLiveData(false)
+
+    val mapIsLoading = MutableLiveData<Boolean>()
+
+    val coordinates = MutableLiveData<LatLng>()
+    val map = MutableLiveData<GoogleMap>()
 
     fun getData() {
         inProgress.postValue(true)
         viewModelScope.launch(Dispatchers.IO) {
             inProgress.postValue(false)
+        }
+    }
+
+    fun setupMap() {
+        map.value?.apply {
+            coordinates.value?.let {
+                addMarker(
+                    MarkerOptions()
+                        .position(it)
+                        .title("You are here")
+                )
+
+                val cameraPosition = CameraPosition.Builder()
+                    .target(it)
+                    .zoom(15f)
+                    .build()
+
+                moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+                mapIsLoading.postValue(false)
+            }
         }
     }
 }

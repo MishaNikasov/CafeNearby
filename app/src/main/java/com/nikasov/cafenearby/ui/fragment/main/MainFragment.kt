@@ -33,7 +33,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.btn.setOnClickListener {
+        binding.root.setOnClickListener {
             findNavController().navigate(R.id.action_mainFragment_to_favoriteFragment)
         }
     }

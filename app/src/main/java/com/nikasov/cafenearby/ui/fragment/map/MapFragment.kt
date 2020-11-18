@@ -1,29 +1,28 @@
 package com.nikasov.cafenearby.ui.fragment.map
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.nikasov.cafenearby.R
 import com.nikasov.cafenearby.databinding.FragmentMapBinding
 import com.nikasov.cafenearby.ui.fragment.BaseFragment
+import com.nikasov.cafenearby.utils.hasLocationPermission
+import com.nikasov.cafenearby.utils.requestLocationPermission
 import com.nikasov.cafenearby.viewmodel.MapViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_map.*
-
+import kotlinx.android.synthetic.main.progress_view.*
 
 @AndroidEntryPoint
-class MapFragment: BaseFragment<FragmentMapBinding>() {
+class MapFragment : BaseFragment<FragmentMapBinding>() {
 
     private val viewModel: MapViewModel by viewModels()
-    private var map: GoogleMap? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,41 +32,68 @@ class MapFragment: BaseFragment<FragmentMapBinding>() {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_map, container, false)
         binding.lifecycleOwner = this
+        binding.viewModel = viewModel
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mapView?.onCreate(savedInstanceState)
+
         setupViews()
+        setupViewModelCallbacks()
     }
 
     override fun setupViews() {
-        mapView.getMapAsync {
-            map = it
-            setupMap()
+        loadMap()
+    }
+
+    private fun setupViewModelCallbacks() {
+        viewModel.apply {
+
+            map.observe(viewLifecycleOwner, {
+                getCurrentLocation()
+            })
+
+            coordinates.observe(viewLifecycleOwner, { currentCoordinates ->
+                currentCoordinates?.let {
+                    setupMap()
+                }
+            })
+
+            mapIsLoading.observe(viewLifecycleOwner, {
+                if (it) {
+                    progressLoader.visibility = View.VISIBLE
+                } else {
+                    progressLoader.visibility = View.GONE
+                }
+            })
         }
     }
 
-    private fun setupMap() {
-        viewModel.mapIsLoaded.postValue(true)
-
-        val coord = LatLng(-34.0, 151.0)
-        map?.apply {
-            addMarker(
-                MarkerOptions()
-                    .position(coord)
-                    .title("Marker in Sydney")
-            )
-
-            val cameraPosition = CameraPosition.Builder()
-                .target(coord)
-                .zoom(12f)
-                .build()
-
-            animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+    private fun loadMap() {
+        mapView.getMapAsync { googleMap ->
+            viewModel.map.postValue(googleMap)
         }
     }
+
+    @SuppressLint("MissingPermission")
+    private fun getCurrentLocation() {
+        if (requireContext().hasLocationPermission()) {
+            val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
+            val lastLocation = fusedLocationProviderClient?.lastLocation
+
+            lastLocation?.addOnSuccessListener { location ->
+                location?.let {
+                    viewModel.coordinates.postValue(LatLng(it.latitude, it.longitude))
+                }
+            }
+
+        } else {
+            requestLocationPermission()
+        }
+    }
+
 
     override fun onStart() {
         super.onStart()
@@ -99,5 +125,5 @@ class MapFragment: BaseFragment<FragmentMapBinding>() {
         mapView?.onSaveInstanceState(outState)
     }
 
-    override fun refresh() { }
+    override fun refresh() {}
 }
