@@ -1,6 +1,7 @@
 package com.nikasov.cafenearby.ui.fragment.base
 
 import android.os.Bundle
+import android.view.View
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import com.nikasov.cafenearby.utils.hideKeyBoard
@@ -16,10 +17,6 @@ abstract class BaseFragment<T : ViewDataBinding> : Fragment() {
         activity?.hideKeyBoard()
     }
 
-    abstract fun setupViews()
-
-    abstract fun refresh()
-
     fun showError(errorMessage: String) {
         requireContext().showToast(errorMessage)
     }
@@ -30,5 +27,7 @@ abstract class BaseFragment<T : ViewDataBinding> : Fragment() {
         activity?.hideKeyBoard()
         clearFindViewByIdCache()
     }
+
+    abstract fun refresh()
 
 }

@@ -9,6 +9,8 @@ import androidx.fragment.app.viewModels
 import com.nikasov.cafenearby.R
 import com.nikasov.cafenearby.databinding.FragmentMainBinding
 import com.nikasov.cafenearby.ui.fragment.base.BaseFragment
+import com.nikasov.cafenearby.utils.hasLocationPermission
+import com.nikasov.cafenearby.utils.requestLocationPermission
 import com.nikasov.cafenearby.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -31,13 +33,21 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupViews()
     }
 
-    override fun refresh() {
-
+    private fun setupViews() {
+//        setupCafeList()
     }
 
-    override fun setupViews() {
-
+    private fun setupCafeList() {
+        if (requireContext().hasLocationPermission()) {
+            viewModel.getCafeList()
+        } else {
+            requestLocationPermission()
+        }
     }
+
+    override fun refresh() { }
+
 }

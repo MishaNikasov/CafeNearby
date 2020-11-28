@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
             intent = intent
         )
 
-        controller.observe(this, { navController ->
+        controller.observe(this, {
 
         })
 

@@ -44,7 +44,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>() {
         setupViewModelCallbacks()
     }
 
-    override fun setupViews() {
+    private fun setupViews() {
         loadMap()
     }
 
@@ -93,7 +93,6 @@ class MapFragment : BaseFragment<FragmentMapBinding>() {
             requestLocationPermission()
         }
     }
-
 
     override fun onStart() {
         super.onStart()

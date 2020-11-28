@@ -23,14 +23,9 @@ class EmptyFragment: BaseFragment<ViewDataBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupViews()
     }
 
     override fun refresh() {
-
-    }
-
-    override fun setupViews() {
 
     }
 }

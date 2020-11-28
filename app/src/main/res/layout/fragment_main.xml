@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="viewModel"
             type="com.nikasov.cafenearby.viewmodel.MainViewModel" />
@@ -11,31 +11,14 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/root"
+        android:background="@color/gold_drop"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:background="@color/cardview_dark_background">
+        android:layout_height="match_parent">
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:adjustViewBounds="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:lottie_autoPlay="true"
-            app:lottie_fileName="l.json"
-            app:lottie_loop="true" />
-
-        <com.airbnb.lottie.LottieAnimationView
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:adjustViewBounds="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:lottie_autoPlay="true"
-            app:lottie_fileName="r.json"
-            app:lottie_loop="true" />
+        <androidx.recyclerview.widget.RecyclerView
+            tools:listitem="@layout/item_cafe"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

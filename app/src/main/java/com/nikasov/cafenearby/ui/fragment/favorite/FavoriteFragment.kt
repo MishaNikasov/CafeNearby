@@ -27,8 +27,4 @@ class FavoriteFragment: BaseFragment<FragmentFavoriteBinding>() {
     override fun refresh() {
 
     }
-
-    override fun setupViews() {
-
-    }
 }
