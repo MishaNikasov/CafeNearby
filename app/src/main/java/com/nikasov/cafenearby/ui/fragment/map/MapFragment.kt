@@ -11,7 +11,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 import com.nikasov.cafenearby.R
 import com.nikasov.cafenearby.databinding.FragmentMapBinding
-import com.nikasov.cafenearby.ui.fragment.BaseFragment
+import com.nikasov.cafenearby.ui.fragment.base.BaseFragment
 import com.nikasov.cafenearby.utils.hasLocationPermission
 import com.nikasov.cafenearby.utils.requestLocationPermission
 import com.nikasov.cafenearby.viewmodel.MapViewModel
@@ -28,7 +28,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_map, container, false)
         binding.lifecycleOwner = this

@@ -1,4 +1,4 @@
-package com.nikasov.cafenearby.ui.fragment
+package com.nikasov.cafenearby.ui.fragment.base
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,7 +14,7 @@ class EmptyFragment: BaseFragment<ViewDataBinding>() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_empty, container, false)
         binding.lifecycleOwner = this

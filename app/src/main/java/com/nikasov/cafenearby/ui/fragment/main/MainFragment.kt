@@ -6,10 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.nikasov.cafenearby.R
 import com.nikasov.cafenearby.databinding.FragmentMainBinding
-import com.nikasov.cafenearby.ui.fragment.BaseFragment
+import com.nikasov.cafenearby.ui.fragment.base.BaseFragment
 import com.nikasov.cafenearby.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,7 +21,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false)
         binding.lifecycleOwner = this
@@ -32,10 +31,6 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.root.setOnClickListener {
-            findNavController().navigate(R.id.action_mainFragment_to_favoriteFragment)
-        }
     }
 
     override fun refresh() {

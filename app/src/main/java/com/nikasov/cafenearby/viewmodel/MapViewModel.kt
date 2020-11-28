@@ -16,19 +16,10 @@ import kotlinx.coroutines.launch
 class MapViewModel @ViewModelInject constructor(
 ): ViewModel() {
 
-    val inProgress = MutableLiveData<Boolean>()
-
     val mapIsLoading = MutableLiveData<Boolean>()
 
     val coordinates = MutableLiveData<LatLng>()
     val map = MutableLiveData<GoogleMap>()
-
-    fun getData() {
-        inProgress.postValue(true)
-        viewModelScope.launch(Dispatchers.IO) {
-            inProgress.postValue(false)
-        }
-    }
 
     fun setupMap() {
         map.value?.apply {

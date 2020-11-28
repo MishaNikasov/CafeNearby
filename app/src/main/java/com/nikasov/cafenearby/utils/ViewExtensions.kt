@@ -3,6 +3,7 @@ package com.nikasov.cafenearby.utils
 import android.app.Activity
 import android.content.Context
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 
 fun Activity.hideKeyBoard() {
@@ -21,4 +22,8 @@ fun Fragment.hideKeyBoard() {
         imm?.hideSoftInputFromWindow(view.windowToken, 0)
         view.clearFocus()
     }
+}
+
+fun Context.showToast(message: String) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }

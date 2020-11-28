@@ -9,16 +9,5 @@
         android:id="@+id/mainFragment"
         android:label="MainFragment"
         android:name="com.nikasov.cafenearby.ui.fragment.main.MainFragment"
-        tools:layout="@layout/fragment_main">
-        <action
-            android:id="@+id/action_mainFragment_to_favoriteFragment"
-            app:destination="@id/favoriteFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/favoriteFragment"
-        tools:layout="@layout/fragment_favorite"
-        android:name="com.nikasov.cafenearby.ui.fragment.main.FavoriteFragment"
-        android:label="FavoriteFragment" />
-
+        tools:layout="@layout/fragment_main" />
 </navigation>
