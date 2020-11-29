@@ -13,6 +13,7 @@ import com.nikasov.cafenearby.utils.hasLocationPermission
 import com.nikasov.cafenearby.utils.requestLocationPermission
 import com.nikasov.cafenearby.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.random.Random
 
 @AndroidEntryPoint
 class MainFragment : BaseFragment<FragmentMainBinding>() {
@@ -37,7 +38,9 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
     }
 
     private fun setupViews() {
-//        setupCafeList()
+        if (viewModel.cafeList.value.isNullOrEmpty()) {
+            setupCafeList()
+        }
     }
 
     private fun setupCafeList() {

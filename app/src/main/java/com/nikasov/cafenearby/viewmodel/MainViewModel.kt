@@ -8,41 +8,40 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.gms.common.api.ApiException
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.model.PlaceLikelihood
+import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
-import com.nikasov.cafenearby.data.local.DataRepository
+import com.nikasov.cafenearby.data.TypeConverter
+import com.nikasov.cafenearby.data.network.model.CafeModel
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class MainViewModel @ViewModelInject constructor(
-    private val dataRepository: DataRepository,
     private val placesClient: PlacesClient
 ): ViewModel() {
 
-    val userId = MutableLiveData<String>()
-
-    fun saveUserId(value: String) {
-        viewModelScope.launch {
-            dataRepository.saveUserId(value)
-        }
-    }
-
-    fun readUserId() {
-        viewModelScope.launch {
-            userId.postValue(dataRepository.readUserId())
-        }
-    }
+    val cafeList = MutableLiveData(arrayListOf<CafeModel>())
+    val cafeDetails = MutableLiveData<CafeModel>()
 
     @SuppressLint("MissingPermission")
     fun getCafeList() {
-        val placeFields: List<Place.Field> = listOf(Place.Field.NAME)
-        val request: FindCurrentPlaceRequest = FindCurrentPlaceRequest.newInstance(placeFields)
+        val placeFields: List<Place.Field> = listOf(
+            Place.Field.NAME,
+            Place.Field.TYPES,
+            Place.Field.ADDRESS,
+            Place.Field.ID,
+            Place.Field.PHOTO_METADATAS
+        )
+        val request = FindCurrentPlaceRequest.newInstance(placeFields)
 
         val placeResponse = placesClient.findCurrentPlace(request)
         placeResponse.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val response = task.result
-                for (placeLikelihood: PlaceLikelihood in response?.placeLikelihoods ?: emptyList()) {
+                val placeList = response?.placeLikelihoods ?: emptyList()
+                convertToCafeModel(placeList)
+                for (placeLikelihood: PlaceLikelihood in placeList) {
                     Timber.d("Place '${placeLikelihood.place.name}' has likelihood: ${placeLikelihood.likelihood}")
                 }
             } else {
@@ -51,6 +50,57 @@ class MainViewModel @ViewModelInject constructor(
                     Timber.d("Place not found: ${exception.statusCode}")
                 }
             }
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    fun getCafeDetails(placeId: String) {
+        val placeFields: List<Place.Field> = listOf(
+            Place.Field.NAME,
+            Place.Field.TYPES,
+            Place.Field.ADDRESS,
+            Place.Field.ID,
+            Place.Field.PHOTO_METADATAS
+        )
+        val request = FetchPlaceRequest.newInstance(placeId, placeFields)
+
+        val placeResponse = placesClient.fetchPlace(request)
+        placeResponse.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                cafeDetails.postValue(TypeConverter.placeToCafe(task.result.place))
+            } else {
+                val exception = task.exception
+                if (exception is ApiException) {
+                    Timber.d("Place not found: ${exception.statusCode}")
+                }
+            }
+        }
+    }
+
+    private fun convertToCafeModel(placesList: List<PlaceLikelihood>) {
+        viewModelScope.launch {
+            val list = arrayListOf<CafeModel>()
+            val typesList = listOf(
+                Place.Type.CAFE,
+                Place.Type.RESTAURANT,
+                Place.Type.FOOD,
+                Place.Type.BAR
+            )
+            placesList.asFlow()
+                .filter {
+                     it.place.types?.forEach { type ->
+                        if (typesList.contains(type)) {
+                            return@filter true
+                        }
+                    }
+                    false
+                }
+                .map {
+                    list.add(TypeConverter.placeLikelihoodToCafe(it))
+                }
+                .collect {
+                    cafeList.postValue(list)
+                }
         }
     }
 }
