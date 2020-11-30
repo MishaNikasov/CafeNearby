@@ -4,6 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <import type="com.nikasov.cafenearby.utils.UiState" />
+
+        <import type="android.view.View" />
+
         <variable
             name="viewModel"
             type="com.nikasov.cafenearby.viewmodel.MainViewModel" />
@@ -11,15 +16,19 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/root"
-        android:background="@color/gold_drop"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/gold_drop">
 
         <androidx.recyclerview.widget.RecyclerView
-            app:cafeList="@{viewModel.cafeList}"
-            tools:listitem="@layout/item_cafe"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            app:cafeList="@{viewModel.cafeList}"
+            tools:listitem="@layout/item_cafe" />
+
+        <include
+            layout="@layout/layout_progress"
+            android:visibility="@{viewModel.uiState == UiState.Loading ? View.VISIBLE : View.GONE}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

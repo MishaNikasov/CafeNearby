@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import com.nikasov.cafenearby.R
 import com.nikasov.cafenearby.databinding.FragmentMainBinding
 import com.nikasov.cafenearby.ui.fragment.base.BaseFragment
+import com.nikasov.cafenearby.utils.UiState
 import com.nikasov.cafenearby.utils.hasLocationPermission
 import com.nikasov.cafenearby.utils.requestLocationPermission
 import com.nikasov.cafenearby.viewmodel.MainViewModel
@@ -35,11 +36,30 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupViews()
+        setupViewModelCallbacks()
     }
 
     private fun setupViews() {
         if (viewModel.cafeList.value.isNullOrEmpty()) {
             setupCafeList()
+        }
+    }
+
+    private fun setupViewModelCallbacks() {
+        viewModel.apply {
+            uiState.observe(viewLifecycleOwner, { state ->
+                when (state) {
+                    is UiState.Success -> {
+                        
+                    }
+                    is UiState.Error -> {
+                        showError(state.message)
+                    }
+                    else -> {
+                        return@observe
+                    }
+                }
+            })
         }
     }
 

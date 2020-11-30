@@ -13,6 +13,7 @@ import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.nikasov.cafenearby.data.TypeConverter
 import com.nikasov.cafenearby.data.network.model.CafeModel
+import com.nikasov.cafenearby.utils.UiState
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -22,10 +23,12 @@ class MainViewModel @ViewModelInject constructor(
 ): ViewModel() {
 
     val cafeList = MutableLiveData(arrayListOf<CafeModel>())
+    val uiState = MutableLiveData<UiState>(UiState.Empty)
     val cafeDetails = MutableLiveData<CafeModel>()
 
     @SuppressLint("MissingPermission")
     fun getCafeList() {
+        uiState.postValue(UiState.Loading)
         val placeFields: List<Place.Field> = listOf(
             Place.Field.NAME,
             Place.Field.TYPES,
@@ -38,6 +41,7 @@ class MainViewModel @ViewModelInject constructor(
         val placeResponse = placesClient.findCurrentPlace(request)
         placeResponse.addOnCompleteListener { task ->
             if (task.isSuccessful) {
+                uiState.postValue(UiState.Success)
                 val response = task.result
                 val placeList = response?.placeLikelihoods ?: emptyList()
                 convertToCafeModel(placeList)
@@ -46,6 +50,7 @@ class MainViewModel @ViewModelInject constructor(
                 }
             } else {
                 val exception = task.exception
+                uiState.postValue(UiState.Error(exception?.localizedMessage?: "Error"))
                 if (exception is ApiException) {
                     Timber.d("Place not found: ${exception.statusCode}")
                 }
@@ -55,6 +60,7 @@ class MainViewModel @ViewModelInject constructor(
 
     @SuppressLint("MissingPermission")
     fun getCafeDetails(placeId: String) {
+        uiState.postValue(UiState.Loading)
         val placeFields: List<Place.Field> = listOf(
             Place.Field.NAME,
             Place.Field.TYPES,
@@ -67,9 +73,11 @@ class MainViewModel @ViewModelInject constructor(
         val placeResponse = placesClient.fetchPlace(request)
         placeResponse.addOnCompleteListener { task ->
             if (task.isSuccessful) {
+                uiState.postValue(UiState.Success)
                 cafeDetails.postValue(TypeConverter.placeToCafe(task.result.place))
             } else {
                 val exception = task.exception
+                uiState.postValue(UiState.Error(exception?.localizedMessage?: "Error"))
                 if (exception is ApiException) {
                     Timber.d("Place not found: ${exception.statusCode}")
                 }
