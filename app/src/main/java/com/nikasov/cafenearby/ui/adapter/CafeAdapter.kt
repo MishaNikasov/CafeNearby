@@ -11,7 +11,7 @@ import com.nikasov.cafenearby.databinding.ItemCafeBinding
 class CafeAdapter :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val interaction: Interaction? = null
+    var interaction: Interaction? = null
 
     private val callback = object : DiffUtil.ItemCallback<CafeModel>() {
 
@@ -55,6 +55,13 @@ class CafeAdapter :
 
         fun bind(item: CafeModel) = with(itemView) {
             binding.cafe = item
+            binding.favoriteBtn.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    interaction?.addToFavorite(item)
+                } else {
+                    interaction?.deleteFromFavorite(item)
+                }
+            }
             itemView.setOnClickListener {
                 interaction?.onItemSelected(adapterPosition, item)
             }
@@ -63,5 +70,7 @@ class CafeAdapter :
 
     interface Interaction {
         fun onItemSelected(position: Int, item: CafeModel)
+        fun addToFavorite(item: CafeModel)
+        fun deleteFromFavorite(item: CafeModel)
     }
 }

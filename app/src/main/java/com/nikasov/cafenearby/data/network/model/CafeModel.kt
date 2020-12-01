@@ -7,5 +7,5 @@ data class CafeModel(
     val title: String?,
     val rating: Double?,
     val address: String?,
-    val photoList: List<PhotoMetadata>?,
+    val photoList: List<PhotoMetadata>? = null,
 )

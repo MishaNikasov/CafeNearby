@@ -1,4 +1,4 @@
-package com.nikasov.cafenearby.data.network
+package com.nikasov.cafenearby.data.network.retrofit
 
 import javax.inject.Inject
 

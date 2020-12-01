@@ -1,6 +1,6 @@
-package com.nikasov.cafenearby.data.local
+package com.nikasov.cafenearby.data.local.storage
 
-import com.nikasov.cafenearby.data.local.Settings.Companion.USER_ID
+import com.nikasov.cafenearby.data.local.storage.Settings.Companion.USER_ID
 import javax.inject.Inject
 
 class DataRepository @Inject constructor(

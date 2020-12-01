@@ -14,36 +14,49 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/shape_item_cafe">
+        android:background="@drawable/shape_item_cafe"
+        android:elevation="20dp">
 
         <TextView
-            android:text="@{cafe.title}"
             android:id="@+id/title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@{cafe.title}"
             android:textColor="@color/gold_drop"
             android:textSize="23sp"
+            app:layout_constraintEnd_toStartOf="@+id/favoriteBtn"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Title" />
 
         <TextView
             android:id="@+id/address"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:text="@{cafe.address}"
             android:textColor="@color/teal_700"
             android:textSize="16sp"
-            android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/favoriteBtn"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title"
             tools:text="Title" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/favoriteBtn"
+            android:layout_width="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

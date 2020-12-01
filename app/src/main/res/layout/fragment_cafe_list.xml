@@ -4,14 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
-        <import type="com.nikasov.cafenearby.utils.UiState" />
-
-        <import type="android.view.View" />
-
+        <variable
+            name="cafeInteraction"
+            type="com.nikasov.cafenearby.ui.adapter.CafeAdapter.Interaction" />
         <variable
             name="viewModel"
-            type="com.nikasov.cafenearby.viewmodel.MainViewModel" />
+            type="com.nikasov.cafenearby.viewmodel.CafeViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,12 +21,16 @@
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:paddingBottom="16dp"
             app:cafeList="@{viewModel.cafeList}"
+            app:cafeInteraction="@{cafeInteraction}"
             tools:listitem="@layout/item_cafe" />
 
         <include
-            layout="@layout/layout_progress"
-            android:visibility="@{viewModel.uiState == UiState.Loading ? View.VISIBLE : View.GONE}" />
+            android:id="@+id/progress"
+            layout="@layout/layout_progress" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

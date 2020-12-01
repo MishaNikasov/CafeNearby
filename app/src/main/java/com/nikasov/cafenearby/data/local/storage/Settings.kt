@@ -1,4 +1,4 @@
-package com.nikasov.cafenearby.data.local
+package com.nikasov.cafenearby.data.local.storage
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences

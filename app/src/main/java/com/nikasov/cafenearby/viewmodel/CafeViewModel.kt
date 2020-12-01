@@ -8,46 +8,37 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.gms.common.api.ApiException
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.model.PlaceLikelihood
-import com.google.android.libraries.places.api.net.FetchPlaceRequest
-import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
-import com.google.android.libraries.places.api.net.PlacesClient
-import com.nikasov.cafenearby.data.TypeConverter
+import com.nikasov.cafenearby.data.local.room.CafeDatabaseRepository
 import com.nikasov.cafenearby.data.network.model.CafeModel
+import com.nikasov.cafenearby.data.network.places.PlaceApiRepository
+import com.nikasov.cafenearby.data.toCafe
+import com.nikasov.cafenearby.data.toCafeEntity
+import com.nikasov.cafenearby.data.toCafeModel
 import com.nikasov.cafenearby.utils.UiState
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class MainViewModel @ViewModelInject constructor(
-    private val placesClient: PlacesClient
+class CafeViewModel @ViewModelInject constructor(
+    private val placeApiRepository: PlaceApiRepository,
+    private val cafeDatabaseRepository: CafeDatabaseRepository
 ): ViewModel() {
 
-    val cafeList = MutableLiveData(arrayListOf<CafeModel>())
     val uiState = MutableLiveData<UiState>(UiState.Empty)
+
     val cafeDetails = MutableLiveData<CafeModel>()
+    val cafeList = MutableLiveData(arrayListOf<CafeModel>())
 
     @SuppressLint("MissingPermission")
     fun getCafeList() {
         uiState.postValue(UiState.Loading)
-        val placeFields: List<Place.Field> = listOf(
-            Place.Field.NAME,
-            Place.Field.TYPES,
-            Place.Field.ADDRESS,
-            Place.Field.ID,
-            Place.Field.PHOTO_METADATAS
-        )
-        val request = FindCurrentPlaceRequest.newInstance(placeFields)
 
-        val placeResponse = placesClient.findCurrentPlace(request)
-        placeResponse.addOnCompleteListener { task ->
+        placeApiRepository.getCurrentPlace().addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 uiState.postValue(UiState.Success)
                 val response = task.result
                 val placeList = response?.placeLikelihoods ?: emptyList()
-                convertToCafeModel(placeList)
-                for (placeLikelihood: PlaceLikelihood in placeList) {
-                    Timber.d("Place '${placeLikelihood.place.name}' has likelihood: ${placeLikelihood.likelihood}")
-                }
+                convertPlacesToCafeList(placeList)
             } else {
                 val exception = task.exception
                 uiState.postValue(UiState.Error(exception?.localizedMessage?: "Error"))
@@ -61,20 +52,11 @@ class MainViewModel @ViewModelInject constructor(
     @SuppressLint("MissingPermission")
     fun getCafeDetails(placeId: String) {
         uiState.postValue(UiState.Loading)
-        val placeFields: List<Place.Field> = listOf(
-            Place.Field.NAME,
-            Place.Field.TYPES,
-            Place.Field.ADDRESS,
-            Place.Field.ID,
-            Place.Field.PHOTO_METADATAS
-        )
-        val request = FetchPlaceRequest.newInstance(placeId, placeFields)
 
-        val placeResponse = placesClient.fetchPlace(request)
-        placeResponse.addOnCompleteListener { task ->
+        placeApiRepository.getPlaceById(placeId).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 uiState.postValue(UiState.Success)
-                cafeDetails.postValue(TypeConverter.placeToCafe(task.result.place))
+                cafeDetails.postValue((task.result.place).toCafe())
             } else {
                 val exception = task.exception
                 uiState.postValue(UiState.Error(exception?.localizedMessage?: "Error"))
@@ -85,7 +67,33 @@ class MainViewModel @ViewModelInject constructor(
         }
     }
 
-    private fun convertToCafeModel(placesList: List<PlaceLikelihood>) {
+    fun addCafeToFavorite(cafeModel: CafeModel) {
+        viewModelScope.launch {
+            cafeDatabaseRepository.insertCafe(cafeEntity = cafeModel.toCafeEntity())
+        }
+    }
+
+    fun deleteFromFavorite(cafeModel: CafeModel) {
+        viewModelScope.launch {
+            cafeDatabaseRepository.deleteCafe(cafeEntity = cafeModel.toCafeEntity())
+        }
+    }
+
+    fun getFavoriteCafe() {
+        viewModelScope.launch {
+            val list = arrayListOf<CafeModel>()
+            cafeDatabaseRepository.getAllCafe().asFlow()
+                .map {
+                    it.toCafeModel()
+                }
+                .collect {
+                    list.add(it)
+                }
+            cafeList.postValue(list)
+        }
+    }
+
+    private fun convertPlacesToCafeList(placesList: List<PlaceLikelihood>) {
         viewModelScope.launch {
             val list = arrayListOf<CafeModel>()
             val typesList = listOf(
@@ -94,6 +102,7 @@ class MainViewModel @ViewModelInject constructor(
                 Place.Type.FOOD,
                 Place.Type.BAR
             )
+
             placesList.asFlow()
                 .filter {
                      it.place.types?.forEach { type ->
@@ -101,14 +110,16 @@ class MainViewModel @ViewModelInject constructor(
                             return@filter true
                         }
                     }
-                    false
+                    true
                 }
                 .map {
-                    list.add(TypeConverter.placeLikelihoodToCafe(it))
+                    it.toCafe()
                 }
                 .collect {
-                    cafeList.postValue(list)
+                    list.add(it)
                 }
+
+            cafeList.postValue(list)
         }
     }
 }

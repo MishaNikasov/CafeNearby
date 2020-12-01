@@ -13,11 +13,9 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(ApplicationComponent::class)
-class DataModule {
+object DataModule {
 
-    companion object {
-       private const val DATA_STORE_NAME = "DataStore"
-    }
+    private const val DATA_STORE_NAME = "DataStore"
 
     @Provides
     @Singleton

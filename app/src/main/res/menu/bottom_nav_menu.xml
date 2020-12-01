@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/main_navigation"
+        android:id="@+id/cafe_navigation"
         android:icon="@drawable/ic_cafe"
         android:title="Home" />
     <item android:id="@+id/favorite_navigation"
