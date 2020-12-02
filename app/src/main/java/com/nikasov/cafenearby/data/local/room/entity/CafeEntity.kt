@@ -6,8 +6,9 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "cafe_table")
 data class CafeEntity(
     @PrimaryKey(autoGenerate = false)
-    val id: String?,
+    val id: String,
     val title: String?,
     val rating: Double?,
-    val address: String?
+    val address: String?,
+    var isFavorite: Boolean = false
 )

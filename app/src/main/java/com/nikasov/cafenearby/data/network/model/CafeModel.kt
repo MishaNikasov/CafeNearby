@@ -8,4 +8,5 @@ data class CafeModel(
     val rating: Double?,
     val address: String?,
     val photoList: List<PhotoMetadata>? = null,
+    var isFavorite: Boolean = false
 )

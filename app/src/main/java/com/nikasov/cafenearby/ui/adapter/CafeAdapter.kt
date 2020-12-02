@@ -1,24 +1,24 @@
 package com.nikasov.cafenearby.ui.adapter
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import com.nikasov.cafenearby.data.network.model.CafeModel
 import com.nikasov.cafenearby.databinding.ItemCafeBinding
+import javax.inject.Inject
 
-class CafeAdapter :
+class CafeAdapter @Inject constructor() :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var interaction: Interaction? = null
+    var isAutomaticallyChanged = true
 
     private val callback = object : DiffUtil.ItemCallback<CafeModel>() {
-
         override fun areItemsTheSame(oldItem: CafeModel, newItem: CafeModel): Boolean {
             return oldItem == newItem
         }
-
         override fun areContentsTheSame(oldItem: CafeModel, newItem: CafeModel): Boolean {
             return oldItem == newItem
         }
@@ -27,7 +27,6 @@ class CafeAdapter :
     private val differ = AsyncListDiffer(this, callback)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-
         return CafeViewHolder(
             ItemCafeBinding.inflate((LayoutInflater.from(parent.context)), parent, false)
         )
@@ -56,10 +55,15 @@ class CafeAdapter :
         fun bind(item: CafeModel) = with(itemView) {
             binding.cafe = item
             binding.favoriteBtn.setOnCheckedChangeListener { _, isChecked ->
+                item.isFavorite = isChecked
                 if (isChecked) {
-                    interaction?.addToFavorite(item)
+                    if (!isAutomaticallyChanged) {
+                        interaction?.addToFavorite(item)
+                    }
                 } else {
-                    interaction?.deleteFromFavorite(item)
+                    if (!isAutomaticallyChanged) {
+                        interaction?.deleteFromFavorite(item)
+                    }
                 }
             }
             itemView.setOnClickListener {

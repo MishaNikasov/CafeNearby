@@ -47,7 +47,7 @@ class CafeListFragment : BaseFragment<FragmentCafeListBinding>() {
 
     private fun loadData() {
         if (viewModel.cafeList.value.isNullOrEmpty()) {
-            setupCafeList()
+//            setupCafeList()
         }
     }
 
@@ -92,12 +92,10 @@ class CafeListFragment : BaseFragment<FragmentCafeListBinding>() {
         }
 
         override fun addToFavorite(item: CafeModel) {
-            Timber.d("${item.title} added to favorite")
             viewModel.addCafeToFavorite(item)
         }
 
         override fun deleteFromFavorite(item: CafeModel) {
-            Timber.d("${item.title} deleted from favorite")
             viewModel.deleteFromFavorite(item)
         }
     }

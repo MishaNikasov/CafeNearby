@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="cafeInteraction"
             type="com.nikasov.cafenearby.ui.adapter.CafeAdapter.Interaction" />
+
         <variable
             name="viewModel"
             type="com.nikasov.cafenearby.viewmodel.CafeViewModel" />
@@ -24,8 +26,8 @@
             android:clipToPadding="false"
             android:overScrollMode="never"
             android:paddingBottom="16dp"
-            app:cafeList="@{viewModel.cafeList}"
             app:cafeInteraction="@{cafeInteraction}"
+            app:cafeList="@{viewModel.cafeList}"
             tools:listitem="@layout/item_cafe" />
 
         <include

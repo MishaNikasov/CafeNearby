@@ -2,6 +2,7 @@ package com.nikasov.cafenearby.viewmodel
 
 import android.annotation.SuppressLint
 import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,6 +10,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.model.PlaceLikelihood
 import com.nikasov.cafenearby.data.local.room.CafeDatabaseRepository
+import com.nikasov.cafenearby.data.local.room.entity.CafeEntity
 import com.nikasov.cafenearby.data.network.model.CafeModel
 import com.nikasov.cafenearby.data.network.places.PlaceApiRepository
 import com.nikasov.cafenearby.data.toCafe
@@ -32,7 +34,6 @@ class CafeViewModel @ViewModelInject constructor(
     @SuppressLint("MissingPermission")
     fun getCafeList() {
         uiState.postValue(UiState.Loading)
-
         placeApiRepository.getCurrentPlace().addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 uiState.postValue(UiState.Success)
@@ -52,7 +53,6 @@ class CafeViewModel @ViewModelInject constructor(
     @SuppressLint("MissingPermission")
     fun getCafeDetails(placeId: String) {
         uiState.postValue(UiState.Loading)
-
         placeApiRepository.getPlaceById(placeId).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 uiState.postValue(UiState.Success)
@@ -79,10 +79,13 @@ class CafeViewModel @ViewModelInject constructor(
         }
     }
 
-    fun getFavoriteCafe() {
+    fun getFavoriteCafe() = cafeDatabaseRepository.getAllCafe()
+
+    fun convertFavoriteList(entityList: List<CafeEntity>) {
         viewModelScope.launch {
+            val newList = ArrayList(entityList)
             val list = arrayListOf<CafeModel>()
-            cafeDatabaseRepository.getAllCafe().asFlow()
+            newList.asFlow()
                 .map {
                     it.toCafeModel()
                 }

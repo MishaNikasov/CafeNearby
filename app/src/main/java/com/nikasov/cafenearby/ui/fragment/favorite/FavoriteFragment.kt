@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.nikasov.cafenearby.R
 import com.nikasov.cafenearby.data.network.model.CafeModel
 import com.nikasov.cafenearby.databinding.FragmentFavoriteBinding
@@ -15,12 +17,15 @@ import com.nikasov.cafenearby.ui.fragment.base.BaseFragment
 import com.nikasov.cafenearby.ui.fragment.cafe.CafePageFragment
 import com.nikasov.cafenearby.viewmodel.CafeViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FavoriteFragment: BaseFragment<FragmentFavoriteBinding>() {
 
     private val viewModel: CafeViewModel by viewModels()
+
+    @Inject
+    lateinit var cafeAdapter: CafeAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,30 +47,42 @@ class FavoriteFragment: BaseFragment<FragmentFavoriteBinding>() {
     }
 
     private fun setupViews() {
-        binding.cafeInteraction = cafeInteraction
+        setupRv()
+    }
+
+    private fun setupRv() {
+        cafeAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        binding.favoriteRecycler.apply {
+            adapter = cafeAdapter
+            layoutManager = LinearLayoutManager(context)
+        }
+        cafeAdapter.interaction = cafeInteraction
+        cafeAdapter.isAutomaticallyChanged = false
     }
 
     private fun loadData() {
-        viewModel.getFavoriteCafe()
+        viewModel.getFavoriteCafe().observe(viewLifecycleOwner, {
+            viewModel.convertFavoriteList(it)
+        })
+        viewModel.cafeList.observe(viewLifecycleOwner, {
+            cafeAdapter.submitList(it)
+        })
     }
 
     private val cafeInteraction = object: CafeAdapter.Interaction {
         override fun onItemSelected(position: Int, item: CafeModel) {
             val bundle = CafePageFragment.getBundle(item.id)
-//            findNavController().navigate(R.id.actionToCafePageFragment, bundle)
+            findNavController().navigate(R.id.actionToCafePageFragment, bundle)
         }
 
         override fun addToFavorite(item: CafeModel) {
-            Timber.d("${item.title} added to favorite")
             viewModel.addCafeToFavorite(item)
         }
 
         override fun deleteFromFavorite(item: CafeModel) {
-            Timber.d("${item.title} deleted from favorite")
             viewModel.deleteFromFavorite(item)
         }
     }
-
     override fun refresh() {
 
     }

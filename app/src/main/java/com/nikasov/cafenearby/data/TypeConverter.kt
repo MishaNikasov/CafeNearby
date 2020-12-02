@@ -4,6 +4,7 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.model.PlaceLikelihood
 import com.nikasov.cafenearby.data.local.room.entity.CafeEntity
 import com.nikasov.cafenearby.data.network.model.CafeModel
+import java.util.*
 
 fun PlaceLikelihood.toCafe(): CafeModel {
     return CafeModel(
@@ -27,10 +28,11 @@ fun Place.toCafe(): CafeModel {
 
 fun CafeModel.toCafeEntity(): CafeEntity {
     return CafeEntity(
-        this.id,
+        this.id?: "${UUID.randomUUID()}",
         this.title,
         this.rating,
-        this.address
+        this.address,
+        this.isFavorite
     )
 }
 
@@ -39,6 +41,8 @@ fun CafeEntity.toCafeModel(): CafeModel {
         this.id,
         this.title,
         this.rating,
-        this.address
+        this.address,
+        null,
+        this.isFavorite
     )
 }

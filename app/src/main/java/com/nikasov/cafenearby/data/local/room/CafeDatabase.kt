@@ -7,7 +7,8 @@ import com.nikasov.cafenearby.data.local.room.entity.CafeEntity
 
 @Database(
     entities = [CafeEntity::class],
-    version = 1
+    version = 1,
+    exportSchema = false
 )
 abstract class CafeDatabase: RoomDatabase() {
     abstract fun getCafeDao(): CafeDao
