@@ -42,7 +42,7 @@ class FavoriteFragment: BaseFragment<FragmentFavoriteBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        loadData()
+        setupCallbacks()
         setupViews()
     }
 
@@ -52,15 +52,16 @@ class FavoriteFragment: BaseFragment<FragmentFavoriteBinding>() {
 
     private fun setupRv() {
         cafeAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        cafeAdapter.viewModel = viewModel
+        cafeAdapter.interaction = cafeInteraction
         binding.favoriteRecycler.apply {
             adapter = cafeAdapter
             layoutManager = LinearLayoutManager(context)
+            cafeAdapter.isAutomaticallyChanged = false
         }
-        cafeAdapter.interaction = cafeInteraction
-        cafeAdapter.isAutomaticallyChanged = false
     }
 
-    private fun loadData() {
+    private fun setupCallbacks() {
         viewModel.getFavoriteCafe().observe(viewLifecycleOwner, {
             viewModel.convertFavoriteList(it)
         })
@@ -73,14 +74,6 @@ class FavoriteFragment: BaseFragment<FragmentFavoriteBinding>() {
         override fun onItemSelected(position: Int, item: CafeModel) {
             val bundle = CafePageFragment.getBundle(item.id)
             findNavController().navigate(R.id.actionToCafePageFragment, bundle)
-        }
-
-        override fun addToFavorite(item: CafeModel) {
-            viewModel.addCafeToFavorite(item)
-        }
-
-        override fun deleteFromFavorite(item: CafeModel) {
-            viewModel.deleteFromFavorite(item)
         }
     }
     override fun refresh() {

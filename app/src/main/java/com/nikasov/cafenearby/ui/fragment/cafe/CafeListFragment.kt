@@ -8,6 +8,8 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.nikasov.cafenearby.R
 import com.nikasov.cafenearby.data.network.model.CafeModel
 import com.nikasov.cafenearby.databinding.FragmentCafeListBinding
@@ -18,12 +20,15 @@ import com.nikasov.cafenearby.utils.hasLocationPermission
 import com.nikasov.cafenearby.utils.requestLocationPermission
 import com.nikasov.cafenearby.viewmodel.CafeViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class CafeListFragment : BaseFragment<FragmentCafeListBinding>() {
 
     private val viewModel: CafeViewModel by viewModels()
+
+    @Inject
+    lateinit var cafeAdapter: CafeAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,7 +47,7 @@ class CafeListFragment : BaseFragment<FragmentCafeListBinding>() {
 
         loadData()
         setupViews()
-        setupViewModelCallbacks()
+        setupCallbacks()
     }
 
     private fun loadData() {
@@ -52,10 +57,21 @@ class CafeListFragment : BaseFragment<FragmentCafeListBinding>() {
     }
 
     private fun setupViews() {
-        binding.cafeInteraction = cafeInteraction
+        setupRv()
     }
 
-    private fun setupViewModelCallbacks() {
+    private fun setupRv() {
+        cafeAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        cafeAdapter.viewModel = viewModel
+        cafeAdapter.interaction = cafeInteraction
+        binding.cafeRecycler.apply {
+            adapter = cafeAdapter
+            layoutManager = LinearLayoutManager(context)
+            cafeAdapter.isAutomaticallyChanged = false
+        }
+    }
+
+    private fun setupCallbacks() {
         viewModel.apply {
             uiState.observe(viewLifecycleOwner, { state ->
                 when (state) {
@@ -74,6 +90,9 @@ class CafeListFragment : BaseFragment<FragmentCafeListBinding>() {
                     }
                 }
             })
+            cafeList.observe(viewLifecycleOwner, {
+                cafeAdapter.submitList(it)
+            })
         }
     }
 
@@ -89,14 +108,6 @@ class CafeListFragment : BaseFragment<FragmentCafeListBinding>() {
         override fun onItemSelected(position: Int, item: CafeModel) {
             val bundle = CafePageFragment.getBundle(item.id)
             findNavController().navigate(R.id.actionToCafePageFragment, bundle)
-        }
-
-        override fun addToFavorite(item: CafeModel) {
-            viewModel.addCafeToFavorite(item)
-        }
-
-        override fun deleteFromFavorite(item: CafeModel) {
-            viewModel.deleteFromFavorite(item)
         }
     }
 

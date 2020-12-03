@@ -4,61 +4,110 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="cafe"
             type="com.nikasov.cafenearby.data.network.model.CafeModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/shape_item_cafe"
-        android:elevation="4dp">
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:elevation="0dp"
+        app:cardPreventCornerOverlap="false"
+        app:rippleColor="@color/white"
+        app:shapeAppearanceOverlay="@style/CafeItemShape">
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:text="@{cafe.title}"
-            android:textColor="@color/gold_drop"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toStartOf="@+id/favoriteBtn"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Title" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/address"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:text="@{cafe.address}"
-            android:textColor="@color/teal_700"
-            android:textSize="13sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/favoriteBtn"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title"
-            tools:text="Title" />
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="5dp"
+                android:fontFamily="@font/comfortaa_bold"
+                android:text="@{cafe.title}"
+                android:textColor="@color/temptress"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@+id/ratingBg"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Title" />
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/favoriteBtn"
-            android:checked="@{cafe.isFavorite}"
-            android:layout_width="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/address"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{cafe.address}"
+                android:textColor="@color/silver"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toEndOf="@+id/title"
+                app:layout_constraintStart_toStartOf="@+id/title"
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                tools:text="Title" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/title"
+                app:layout_constraintStart_toStartOf="@id/address" />
 
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/favoriteBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:checked="@{cafe.isFavorite}"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/image"
+                android:layout_width="110dp"
+                android:layout_height="150dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/coffe"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/CafeItemShape" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/ratingBg"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:elevation="4dp"
+                android:src="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/image"
+                app:layout_constraintEnd_toStartOf="@+id/image"
+                app:layout_constraintStart_toStartOf="@+id/image"
+                app:layout_constraintTop_toTopOf="@+id/image"
+                app:shapeAppearanceOverlay="@style/Rectangle"
+                tools:shapeAppearanceOverlay="null" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="5dp"
+                android:text="4.5"
+                android:textColor="@color/temptress"
+                android:textSize="13sp"
+                app:layout_constraintBottom_toBottomOf="@+id/ratingBg"
+                app:layout_constraintEnd_toEndOf="@+id/ratingBg"
+                app:layout_constraintStart_toStartOf="@+id/ratingBg"
+                app:layout_constraintTop_toTopOf="@+id/ratingBg"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
 </layout>

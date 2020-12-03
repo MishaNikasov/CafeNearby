@@ -8,6 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="gold_drop">#F77F00</color>
-    <color name="punch">#D62828</color>
+    <color name="silver">#BCBCBC</color>
+
+    <color name="temptress">#430007</color>
 </resources>

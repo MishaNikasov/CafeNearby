@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.nikasov.cafenearby.data.network.model.CafeModel
 import com.nikasov.cafenearby.databinding.ItemCafeBinding
+import com.nikasov.cafenearby.viewmodel.CafeViewModel
 import javax.inject.Inject
 
 class CafeAdapter @Inject constructor() :
@@ -14,6 +15,7 @@ class CafeAdapter @Inject constructor() :
 
     var interaction: Interaction? = null
     var isAutomaticallyChanged = true
+    var viewModel: CafeViewModel? = null
 
     private val callback = object : DiffUtil.ItemCallback<CafeModel>() {
         override fun areItemsTheSame(oldItem: CafeModel, newItem: CafeModel): Boolean {
@@ -58,11 +60,11 @@ class CafeAdapter @Inject constructor() :
                 item.isFavorite = isChecked
                 if (isChecked) {
                     if (!isAutomaticallyChanged) {
-                        interaction?.addToFavorite(item)
+                        viewModel?.addCafeToFavorite(item)
                     }
                 } else {
                     if (!isAutomaticallyChanged) {
-                        interaction?.deleteFromFavorite(item)
+                        viewModel?.deleteFromFavorite(item)
                     }
                 }
             }
@@ -74,7 +76,5 @@ class CafeAdapter @Inject constructor() :
 
     interface Interaction {
         fun onItemSelected(position: Int, item: CafeModel)
-        fun addToFavorite(item: CafeModel)
-        fun deleteFromFavorite(item: CafeModel)
     }
 }

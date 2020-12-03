@@ -4,11 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
-        <variable
-            name="cafeInteraction"
-            type="com.nikasov.cafenearby.ui.adapter.CafeAdapter.Interaction" />
-
         <variable
             name="viewModel"
             type="com.nikasov.cafenearby.viewmodel.CafeViewModel" />
@@ -17,17 +12,15 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/root"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/gold_drop">
+        android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/cafeRecycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
             android:overScrollMode="never"
             android:paddingBottom="16dp"
-            app:cafeInteraction="@{cafeInteraction}"
-            app:cafeList="@{viewModel.cafeList}"
             tools:listitem="@layout/item_cafe" />
 
         <include

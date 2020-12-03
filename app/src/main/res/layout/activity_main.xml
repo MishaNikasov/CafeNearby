@@ -16,6 +16,7 @@
         android:id="@+id/bottomNavigation"
         app:labelVisibilityMode="unlabeled"
         android:layout_width="match_parent"
+        app:itemIconTint="@color/temptress"
         android:layout_height="wrap_content"
         app:menu="@menu/bottom_nav_menu"/>
 </LinearLayout>

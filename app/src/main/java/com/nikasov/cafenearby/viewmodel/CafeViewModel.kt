@@ -6,6 +6,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagedList
+import androidx.paging.PagingData
 import com.google.android.gms.common.api.ApiException
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.model.PlaceLikelihood
@@ -93,6 +95,8 @@ class CafeViewModel @ViewModelInject constructor(
                     list.add(it)
                 }
             cafeList.postValue(list)
+
+            val config = PagingData
         }
     }
 
