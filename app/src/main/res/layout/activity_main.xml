@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:background="@color/temptre"
+    android:orientation="vertical">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/navHostContainer"
@@ -14,9 +15,9 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
-        app:labelVisibilityMode="unlabeled"
         android:layout_width="match_parent"
-        app:itemIconTint="@color/temptress"
         android:layout_height="wrap_content"
-        app:menu="@menu/bottom_nav_menu"/>
+        app:itemIconTint="@color/bottom_navigation_icon"
+        app:labelVisibilityMode="unlabeled"
+        app:menu="@menu/bottom_nav_menu" />
 </LinearLayout>

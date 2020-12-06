@@ -95,8 +95,6 @@ class CafeViewModel @ViewModelInject constructor(
                     list.add(it)
                 }
             cafeList.postValue(list)
-
-            val config = PagingData
         }
     }
 
@@ -117,7 +115,7 @@ class CafeViewModel @ViewModelInject constructor(
                             return@filter true
                         }
                     }
-                    true
+                    false
                 }
                 .map {
                     it.toCafe()

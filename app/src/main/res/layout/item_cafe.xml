@@ -17,7 +17,7 @@
         android:layout_marginTop="12dp"
         android:elevation="0dp"
         app:cardPreventCornerOverlap="false"
-        app:rippleColor="@color/white"
+        app:rippleColor="@color/temptre"
         app:shapeAppearanceOverlay="@style/CafeItemShape">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,7 +31,7 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="5dp"
-                android:fontFamily="@font/comfortaa_bold"
+                android:textStyle="bold"
                 android:text="@{cafe.title}"
                 android:textColor="@color/temptress"
                 android:textSize="16sp"
@@ -45,7 +45,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@{cafe.address}"
-                android:textColor="@color/silver"
+                android:textColor="@color/temptres"
                 android:textSize="13sp"
                 app:layout_constraintEnd_toEndOf="@+id/title"
                 app:layout_constraintStart_toStartOf="@+id/title"
@@ -92,8 +92,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/image"
                 app:layout_constraintStart_toStartOf="@+id/image"
                 app:layout_constraintTop_toTopOf="@+id/image"
-                app:shapeAppearanceOverlay="@style/Rectangle"
-                tools:shapeAppearanceOverlay="null" />
+                app:shapeAppearanceOverlay="@style/Rectangle" />
 
             <TextView
                 android:layout_width="wrap_content"

@@ -52,7 +52,7 @@ class CafeListFragment : BaseFragment<FragmentCafeListBinding>() {
 
     private fun loadData() {
         if (viewModel.cafeList.value.isNullOrEmpty()) {
-//            setupCafeList()
+            setupCafeList()
         }
     }
 
@@ -106,8 +106,9 @@ class CafeListFragment : BaseFragment<FragmentCafeListBinding>() {
 
     private val cafeInteraction = object: CafeAdapter.Interaction {
         override fun onItemSelected(position: Int, item: CafeModel) {
-            val bundle = CafePageFragment.getBundle(item.id)
-            findNavController().navigate(R.id.actionToCafePageFragment, bundle)
+//            val bundle = CafePageFragment.getBundle(item.id)
+            viewModel.addCafeToFavorite(item)
+//            findNavController().navigate(R.id.actionToCafePageFragment, bundle)
         }
     }
 
