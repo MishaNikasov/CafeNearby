@@ -52,7 +52,7 @@ class CafeListFragment : BaseFragment<FragmentCafeListBinding>() {
 
     private fun loadData() {
         if (viewModel.cafeList.value.isNullOrEmpty()) {
-            setupCafeList()
+//            setupCafeList()
         }
     }
 

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <View
+        android:id="@+id/opop"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:background="@color/teal_200"
+        app:layout_constraintBottom_toBottomOf="@id/pr"
+        app:layout_constraintStart_toStartOf="@+id/text"
+        app:layout_constraintTop_toTopOf="@id/pr" />
+
+    <TextView
+        android:text="hui hu i еупывфп"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/text"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/opop" />
+
+    <View
+        app:layout_constraintStart_toStartOf="@id/text"
+        app:layout_constraintEnd_toEndOf="@id/text"
+        android:id="@+id/pr"
+        android:background="@color/teal_700"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="4dp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

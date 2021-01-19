@@ -17,7 +17,7 @@
         android:layout_marginTop="12dp"
         android:elevation="0dp"
         app:cardPreventCornerOverlap="false"
-        app:rippleColor="@color/temptre"
+        app:rippleColor="@color/temptres"
         app:shapeAppearanceOverlay="@style/CafeItemShape">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -92,6 +92,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/image"
                 app:layout_constraintStart_toStartOf="@+id/image"
                 app:layout_constraintTop_toTopOf="@+id/image"
+                tools:shapeAppearanceOverlay="@null"
                 app:shapeAppearanceOverlay="@style/Rectangle" />
 
             <TextView
